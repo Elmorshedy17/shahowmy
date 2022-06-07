@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shahowmy/app_core/resources/app_font_styles/app_font_styles.dart';
+import 'package:shahowmy/app_core/resources/app_routes_names/app_routes_names.dart';
 import 'package:shahowmy/app_core/resources/app_style/app_style.dart';
 import 'package:shahowmy/features/home/home_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,25 +39,37 @@ class _HomeTabsWidgetState extends State<HomeTabsWidget> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: (){
-                        homeManager.resetManager(
-                            paginationReset: true,
-                            searchReset: true,
-                            statusReset: true
-                        );
-                        if(homeTabTypeSnapshot.data?.id == homeTabTypes[index].id){
-                          homeManager.changeStatus(
-                         newStatusId: "",
-                          resetHomeStatus: true);
-                        }else{
-                          homeManager.status.sink.add(homeTabTypes[index]);
-                          homeManager.changeStatus(
-                              newStatusId: "${homeTabTypes[index].id}",
-                              resetHomeStatus: false);
-                        }
-                        homeManager.inPaginationState.add(PaginationState.loading);
-                        homeManager.reCallManager();
 
-                      },
+                        if(index == 5){
+                          if(context.use<PrefsService>().userObj!.contacts == "yes"){
+                            Navigator.of(context).pushNamed(AppRoutesNames.contactsPage);
+                          }else{
+                            context.use<ToastTemplate>().show("جهات الإتصال غير متاحة");
+                          }
+
+                        }else{
+                          homeManager.resetManager(
+                              paginationReset: true,
+                              searchReset: true,
+                              statusReset: true
+                          );
+                          if(homeTabTypeSnapshot.data?.id == homeTabTypes[index].id){
+                            homeManager.changeStatus(
+                                newStatusId: "",
+                                resetHomeStatus: true);
+                          }else{
+                            homeManager.status.sink.add(homeTabTypes[index]);
+                            homeManager.changeStatus(
+                                newStatusId: "${homeTabTypes[index].id}",
+                                resetHomeStatus: false);
+                          }
+                          homeManager.inPaginationState.add(PaginationState.loading);
+                          homeManager.reCallManager();
+
+
+                        }
+
+                    },
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 5 - 5,
                         child: Center(

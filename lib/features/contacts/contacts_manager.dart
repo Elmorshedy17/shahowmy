@@ -28,9 +28,9 @@ void searchInContacts({required String word}){
   for (var contact in subject.value.contact!) {
     if(contact.name!.contains(word) || contact.phone!.contains(word) || contact.destination!.contains(word)){
       contacts.add(contact);
-      contactsSubject.sink.add(contacts);
     }
   }
+  contactsSubject.sink.add(contacts);
 }
 
   void execute(){

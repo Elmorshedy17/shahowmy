@@ -69,14 +69,14 @@ class _ContactsPageState extends State<ContactsPage> {
           },
           onSuccess: (context, contactsSnapshot) {
           return StreamBuilder<List<Contact>>(
-            initialData: [],
+            initialData: const [],
             stream: contactsInfoManager.contactsSubject,
             builder: (context, contactsListSnapshot) {
               return Container(
                 padding:const EdgeInsets.all(15),
                 child: Stack(
                   children: [
-                    Column(
+                    contactsListSnapshot.data!.isNotEmpty ? Column(
                       children: [
                         const SizedBox(
                           height: 70,
@@ -138,7 +138,10 @@ class _ContactsPageState extends State<ContactsPage> {
                           },),
                         ),
                       ],
-                    ),
+                    ):NotAvailableComponent(
+              view: Icon(Icons.contact_phone_outlined,size: 125.sp,color: Colors.blueGrey.withOpacity(.4),),
+              title: 'لا توجد جهات اتصال متاحه',
+              ),
                     Positioned(
                         top: 0,
                         right: 0,
