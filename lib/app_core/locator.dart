@@ -3,9 +3,13 @@ import 'package:shahowmy/app_core/fcm/FcmTokenManager.dart';
 import 'package:shahowmy/app_core/fcm/localNotificationService.dart';
 import 'package:shahowmy/app_core/fcm/pushNotification_service.dart';
 import 'package:shahowmy/features/choose_language/choose_language_manager.dart';
+import 'package:shahowmy/features/contacts/contacts_manager.dart';
 import 'package:shahowmy/features/get_search_info/get_search_info_manager.dart';
 import 'package:shahowmy/features/home/home_manager.dart';
 import 'package:shahowmy/features/login/login_manager.dart';
+import 'package:shahowmy/features/operation_files/files_operaations_manager.dart';
+import 'package:shahowmy/features/operations/operations_info/get_operaations_info_manager.dart';
+import 'package:shahowmy/features/operations/operations_post/operations_post_manager.dart';
 
 import 'app_core.dart';
 
@@ -66,5 +70,23 @@ Future<void> setupLocator() async {
   /// SearchInfoManager
   locator.registerLazySingleton<SearchInfoManager>(
       () => SearchInfoManager());
+
+  /// OperationsInfoManager
+  locator.registerLazySingleton<OperationsInfoManager>(
+      () => OperationsInfoManager());
+
+
+  /// OperationsPostManager
+  locator.registerLazySingleton<OperationsPostManager>(
+      () => OperationsPostManager());
+
+
+  /// OperationFilesManager
+  locator.registerLazySingleton<OperationFilesManager>(
+      () => OperationFilesManager());
+
+  /// ContactsInfoManager
+  locator.registerLazySingleton<ContactsInfoManager>(
+      () => ContactsInfoManager());
 
 }

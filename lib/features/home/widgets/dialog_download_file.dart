@@ -5,12 +5,15 @@ import 'package:shahowmy/app_core/resources/app_assets/app_assets.dart';
 import 'package:shahowmy/app_core/resources/app_font_styles/app_font_styles.dart';
 import 'package:shahowmy/features/home/home_manager.dart';
 import 'package:shahowmy/features/home/home_page.dart';
+import 'package:shahowmy/features/operation_files/files_operaations_manager.dart';
+import 'package:shahowmy/features/operation_files/files_operations_info_response.dart';
 import 'package:shahowmy/shared/main_button/main_button_widget.dart';
 import 'package:shahowmy/shared/selection_widget/selection_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shahowmy/shared/url_launcher/url_launcher.dart';
 
 
-void showDownloadDialog(context) {
+void showDownloadDialog(context,operationId) {
   showGeneralDialog(
     context: context,
     barrierLabel: "Barrier",
@@ -18,70 +21,7 @@ void showDownloadDialog(context) {
     barrierColor: Colors.black.withOpacity(0.5),
     transitionDuration:const Duration(milliseconds: 500),
     pageBuilder: (_, __, ___) {
-      return Center(
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding:const EdgeInsets.symmetric(horizontal: 20,vertical: 25),
-            height: MediaQuery.of(context).size.height * .5,
-            width: MediaQuery.of(context).size.width * .8,
-            // child:const SizedBox.expand(child: FlutterLogo()),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding:const EdgeInsets.only(top: 15,right: 10,left: 10),
-                  child: Column(
-                    children: [
-                      Text("الملف",style: AppFontStyle.labelBlackStyle.copyWith(fontWeight: FontWeight.bold,fontSize: 16),),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView.separated(
-                    // shrinkWrap: true,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    itemCount: downloadFiles.length,
-                    separatorBuilder: (_, index) => const Divider(
-                      height: 45,
-                    ),
-                    itemBuilder: (_, index) => InkWell(
-                      onTap: (){
-
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("${downloadFiles[index].title}",style: AppFontStyle.labelBlackStyle,),
-                          SvgPicture.asset(
-                            AppAssets.download,
-                            // color: Colors.brown,
-                            height: 15,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Center(
-                  child: MainButtonWidget(title: "الغاء",width: 150.w,onClick: (){
-                    Navigator.of(context).pop();
-                  }),
-                ),
-              ],
-            ),
-            margin:const EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(40)),
-          ),
-        ),
-      );
+      return FilesWidget(operationId: operationId,);
     },
     transitionBuilder: (_, anim, __, child) {
       Tween<Offset> tween;
@@ -103,19 +43,113 @@ void showDownloadDialog(context) {
 }
 
 
-class DownloadFiles{
-  int?id;
-  String? title;
-  DownloadFiles({this.id,this.title});
+
+
+class FilesWidget extends StatefulWidget {
+  final int operationId;
+
+   FilesWidget({Key? key,required this.operationId}) : super(key: key);
+
+  @override
+  State<FilesWidget> createState() => _FilesWidgetState();
 }
 
-List<DownloadFiles> downloadFiles = [
-  DownloadFiles(
-    id: 1,
-    title: "جواز السفر"
-  ),
-  DownloadFiles(
-    id: 2,
-    title: "جواز السفر"
-  ),
-];
+class _FilesWidgetState extends State<FilesWidget> {
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(!locator<OperationFilesManager>().subject.hasValue){
+      locator<OperationFilesManager>().execute(operationId: widget.operationId);
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    final operationFilesManager = context.use<OperationFilesManager>();
+
+
+    return Observer<OperationFilesResponse>(
+        stream: operationFilesManager.subject.stream,
+        onRetryClicked: (){
+          operationFilesManager.execute(operationId: widget.operationId);
+        },
+        onSuccess: (context, operationFilesSnapshot) {
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding:const EdgeInsets.symmetric(horizontal: 20,vertical: 25),
+              height: MediaQuery.of(context).size.height * .5,
+              width: MediaQuery.of(context).size.width * .8,
+              // child:const SizedBox.expand(child: FlutterLogo()),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding:const EdgeInsets.only(top: 15,right: 10,left: 10),
+                    child: Column(
+                      children: [
+                        Text("الملف",style: AppFontStyle.labelBlackStyle.copyWith(fontWeight: FontWeight.bold,fontSize: 16),),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      // shrinkWrap: true,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      itemCount: operationFilesSnapshot.data!.files!.length,
+                      separatorBuilder: (_, index) => const Divider(
+                        height: 45,
+                      ),
+                      itemBuilder: (_, index) => InkWell(
+                        onTap: (){
+
+                        },
+                        child: InkWell(
+                          onTap: (){
+                            if( operationFilesSnapshot.data!.files![index].link != "" || operationFilesSnapshot.data!.files![index].link != null)
+                            openURL(operationFilesSnapshot.data!.files![index].link);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${operationFilesSnapshot.data!.files![index].name}",style: AppFontStyle.labelBlackStyle,),
+                              SvgPicture.asset(
+                                AppAssets.download,
+                                // color: Colors.brown,
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Center(
+                    child: MainButtonWidget(title: "الغاء",width: 150.w,onClick: (){
+                      Navigator.of(context).pop();
+                    }),
+                  ),
+                ],
+              ),
+              margin:const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(40)),
+            ),
+          ),
+        );
+      }
+    );
+  }
+}

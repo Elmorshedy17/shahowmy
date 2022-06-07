@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:shahowmy/app_core/resources/app_assets/app_assets.dart';
 import 'package:shahowmy/app_core/resources/app_font_styles/app_font_styles.dart';
@@ -76,96 +77,114 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(
                                 height: 30.h,
                               ),
-                              Text("مرحبا بك مرة اخرى",style: AppFontStyle.hugTitleBoldBlackStyle,),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Text("من فضلك ادخل اسم المستخدم وكلمة المرور",style: AppFontStyle.descBigGreyStyle,),
-                              SizedBox(
-                                height: 50.h,
-                              ),
-                              Text("اسم المستخدم",style: AppFontStyle.labelGreyStyle,),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              CustomTextFiled(
-                                currentFocus: fullNameFocus,
-                                controller: _fullNameController,
-                                // obscureText: obscureText,
-                                keyboardType: TextInputType.text,
-                                hintText:
-                                'اسم المستخدم',
-                                maxLines: 1,
-                                onFieldSubmitted: (v) {
-                                  FocusScope.of(context)
-                                      .requestFocus(passwordFocus);
-                                },
-                                validationBool: (v) {
-                                  return (v.length < 3);
-                                },
-                                validationErrorMessage:
-                                'يجب ان لا يقل عدد الاحرف عن ٣',
-                              ),
-
-                              const SizedBox(
-                                height: 35,
-                              ),
-                              Text("كلمة المرور",style: AppFontStyle.labelGreyStyle,),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              CustomTextFiledObscureText(
-                                currentFocus: passwordFocus,
-                                controller: _passwordController,
-                                // obscureText: obscureText,
-                                keyboardType: TextInputType.visiblePassword,
-                                hintText:
-                                '*********',
-                                // prefixIcon: Padding(
-                                //   padding: const EdgeInsets.all(15.0),
-                                //   child: SvgPicture.asset(
-                                //     AppAssets.lock,
-                                //     // color: Colors.brown,
-                                //     height: 15,
-                                //   ),
-                                // ),
-                                maxLines: 1,
-                                onFieldSubmitted: (v) {
-                                  removeFocus(context);
-                                },
-                                validationBool: (v) {
-                                  return (v.length < 3);
-                                },
-                                validationErrorMessage:
-                                'يجب ان لا يقل عدد الاحرف عن ٣',
-                              ),
-
-                              SizedBox(
-                                height: 50.h,
-                              ),
-
-                              MainButtonWidget(
-                                title:
-                                'تسجيل دخول',
-                                onClick: () async {
-                                  removeFocus(context);
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
-                                  } else {
-                                    setState(() {
-                                      _autoValidateMode = AutovalidateMode.always;
-                                    });
-                                    return;
-                                  }
-
-
-                                  await loginManager.login(
-                                    request: LoginRequest(
-                                      username: _fullNameController.text,
-                                      password: _passwordController.text,
+                              FadeInRightBig(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("مرحبا بك مرة اخرى",style: AppFontStyle.hugTitleBoldBlackStyle,),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
-                                  );
-                                },
+                                    Text("من فضلك ادخل اسم المستخدم وكلمة المرور",style: AppFontStyle.descBigGreyStyle,),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 50.h,
+                              ),
+                              FadeInLeftBig(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("اسم المستخدم",style: AppFontStyle.labelGreyStyle,),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    CustomTextFiled(
+                                      currentFocus: fullNameFocus,
+                                      controller: _fullNameController,
+                                      // obscureText: obscureText,
+                                      keyboardType: TextInputType.text,
+                                      hintText:
+                                      'اسم المستخدم',
+                                      maxLines: 1,
+                                      onFieldSubmitted: (v) {
+                                        FocusScope.of(context)
+                                            .requestFocus(passwordFocus);
+                                      },
+                                      validationBool: (v) {
+                                        return (v.length < 3);
+                                      },
+                                      validationErrorMessage:
+                                      'يجب ان لا يقل عدد الاحرف عن ٣',
+                                    ),
+
+                                    const SizedBox(
+                                      height: 35,
+                                    ),
+                                    Text("كلمة المرور",style: AppFontStyle.labelGreyStyle,),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    CustomTextFiledObscureText(
+                                      currentFocus: passwordFocus,
+                                      controller: _passwordController,
+                                      // obscureText: obscureText,
+                                      keyboardType: TextInputType.visiblePassword,
+                                      hintText:
+                                      '*********',
+                                      // prefixIcon: Padding(
+                                      //   padding: const EdgeInsets.all(15.0),
+                                      //   child: SvgPicture.asset(
+                                      //     AppAssets.lock,
+                                      //     // color: Colors.brown,
+                                      //     height: 15,
+                                      //   ),
+                                      // ),
+                                      maxLines: 1,
+                                      onFieldSubmitted: (v) {
+                                        removeFocus(context);
+                                      },
+                                      validationBool: (v) {
+                                        return (v.length < 3);
+                                      },
+                                      validationErrorMessage:
+                                      'يجب ان لا يقل عدد الاحرف عن ٣',
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(
+                                height: 50.h,
+                              ),
+
+                              FadeInRightBig(
+                                child: MainButtonWidget(
+                                  title:
+                                  'تسجيل دخول',
+                                  onClick: () async {
+                                    removeFocus(context);
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                    } else {
+                                      setState(() {
+                                        _autoValidateMode = AutovalidateMode.always;
+                                      });
+                                      return;
+                                    }
+
+
+                                    await loginManager.login(
+                                      request: LoginRequest(
+                                        username: _fullNameController.text,
+                                        password: _passwordController.text,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
 
                             ],

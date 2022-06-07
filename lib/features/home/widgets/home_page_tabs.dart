@@ -59,11 +59,22 @@ class _HomeTabsWidgetState extends State<HomeTabsWidget> {
                       },
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 5 - 5,
-                        child: Column(
-                          children: [
-                            Image.asset(homeTabTypes[index].iconUrl!,fit: BoxFit.fill,),
-                            Text("${homeTabTypes[index].name}",style: homeTabTypeSnapshot.data?.id == homeTabTypes[index].id? AppFontStyle.labelBlackStyle.copyWith(color: AppStyle.oil,fontWeight: FontWeight.bold) : AppFontStyle.labelBlackStyle,)
-                          ],
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if( index == 5) const  SizedBox(height: 13,),
+                              Image.asset(homeTabTypes[index].iconUrl!,fit: BoxFit.fill,width: index == 5 ? 50 : 100,),
+                              if( index == 5) const  SizedBox(height: 4,),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(child: Text("${homeTabTypes[index].name}",textAlign: TextAlign.center,style: homeTabTypeSnapshot.data?.id == homeTabTypes[index].id? AppFontStyle.labelBlackStyle.copyWith(color: AppStyle.oil,fontWeight: FontWeight.bold) : AppFontStyle.labelBlackStyle,)),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );

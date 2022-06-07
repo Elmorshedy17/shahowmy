@@ -5,6 +5,7 @@ import 'package:shahowmy/app_core/app_core.dart';
 import 'package:shahowmy/app_core/resources/app_assets/app_assets.dart';
 import 'package:shahowmy/features/home/home_repo.dart';
 import 'package:shahowmy/features/home/home_response.dart';
+import 'package:shahowmy/features/operations/operations_info/get_operations_info_response.dart';
 import 'package:shahowmy/shared/domain/operations.dart';
 
 import '../get_search_info/get_search_info_response.dart';
@@ -42,14 +43,42 @@ enum PaginationState {
  }
 
 
-  final ValueNotifier<int> _selectionNotifier = ValueNotifier(-1);
-  set inSelected(int newValue) => _selectionNotifier.value = newValue;
-  ValueNotifier<int> get notifier => _selectionNotifier;
-  int get selectedIndex => _selectionNotifier.value;
+  // final ValueNotifier<int> _selectionNotifier = ValueNotifier(-1);
+  // set inSelected(int newValue) => _selectionNotifier.value = newValue;
+  // ValueNotifier<int> get notifier => _selectionNotifier;
+  // int get selectedIndex => _selectionNotifier.value;
 
 
   final BehaviorSubject<Destination> destinationSubject =
   BehaviorSubject<Destination>();
+
+  final BehaviorSubject<ChoicesStatus> choicesStatusSubject =
+  BehaviorSubject<ChoicesStatus>.seeded(ChoicesStatus(
+   name: "",
+   id: "",
+   active: ""
+  ));
+
+  final BehaviorSubject<ChoicesStatus> choicesTransferSubject =
+  BehaviorSubject<ChoicesStatus>.seeded(ChoicesStatus(
+      name: "",
+      id: "",
+      active: ""
+  ));
+
+
+  void resetStatusTransfer (){
+   choicesTransferSubject.sink.add(ChoicesStatus(
+       name: "",
+       id: "",
+       active: ""
+   ));
+   choicesStatusSubject.sink.add(ChoicesStatus(
+       name: "",
+       id: "",
+       active: ""
+   ));
+  }
 
   final BehaviorSubject<Destination> statusSubject =
   BehaviorSubject<Destination>();
